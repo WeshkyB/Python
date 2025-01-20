@@ -67,10 +67,9 @@ def prevent_window_switch():
     """Verhindert den Wechsel zwischen Fenstern durch Alt+Tab."""
     while True:
         if keyboard.is_pressed('alt+tab'):
-            keyboard.block_key('tab')  # Verhindert das Drücken von Tab
+            keyboard.block_key('tab')  
         time.sleep(0.1)
 
-# GUI für Benutzersteuerung
 def main_gui():
     """Startet die grafische Benutzeroberfläche."""
     sg.theme("DarkBlue")
@@ -94,29 +93,24 @@ def main_gui():
             break
 
         if event == "Starten":
-            # Prozesse überwachen
             process_list = [p.strip() for p in values["processes"].split(",") if p.strip()]
             thread_process = threading.Thread(target=monitor_processes, args=(process_list,), daemon=True)
             threads.append(thread_process)
             thread_process.start()
 
-            # Dateiüberwachung starten
             directory_to_watch = values["directory"]
             thread_file_monitor = threading.Thread(target=monitor_files, args=(directory_to_watch,), daemon=True)
             threads.append(thread_file_monitor)
             thread_file_monitor.start()
 
-            # Tastatureingaben überwachen
             thread_keyboard = threading.Thread(target=monitor_keyboard, daemon=True)
             threads.append(thread_keyboard)
             thread_keyboard.start()
 
-            # Screenshot-Erstellung starten
             thread_screenshot = threading.Thread(target=take_screenshot, daemon=True)
             threads.append(thread_screenshot)
             thread_screenshot.start()
 
-            # Fensterwechsel verhindern
             thread_window_switch = threading.Thread(target=prevent_window_switch, daemon=True)
             threads.append(thread_window_switch)
             thread_window_switch.start()
