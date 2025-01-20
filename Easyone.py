@@ -4,20 +4,18 @@ import threading
 import time
 import PySimpleGUI as sg
 import logging
-import keyboard  # Zum Überwachen von Tastenkombinationen
+import keyboard  
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 from PIL import ImageGrab
 import datetime
 
-# Einrichtung der Protokollierung
 logging.basicConfig(
     filename="anti_monitor_log.txt",
     level=logging.INFO,
     format="%(asctime)s - %(message)s",
 )
 
-# Funktion 1: Prozesse überwachen und Benachrichtigungen
 def monitor_processes(process_names):
     """Überwacht Prozesse und gibt Benachrichtigungen aus."""
     while True:
@@ -28,7 +26,6 @@ def monitor_processes(process_names):
                     sg.popup(f"Prozess gestartet: {proc.info['name']} (PID: {proc.info['pid']})")
         time.sleep(5)
 
-# Funktion 2: Dateiüberwachung (Erkennt Dateiänderungen)
 class FileChangeHandler(FileSystemEventHandler):
     def on_modified(self, event):
         if event.is_directory:
@@ -49,16 +46,14 @@ def monitor_files(directory_to_watch):
         observer.stop()
     observer.join()
 
-# Funktion 3: Tastatureingabe überwachen (z.B. Alt+Tab)
 def monitor_keyboard():
     """Überwacht Tastatureingaben."""
     while True:
-        if keyboard.is_pressed('alt+tab'):  # Wenn Alt+Tab gedrückt wird
+        if keyboard.is_pressed('alt+tab'): 
             logging.info("Tastenkombination Alt+Tab erkannt!")
             sg.popup("Tastenkombination Alt+Tab erkannt!")
         time.sleep(0.5)
 
-# Funktion 4: Screenshot erstellen
 def take_screenshot():
     """Erstellt regelmäßig Screenshots des Bildschirms."""
     while True:
@@ -66,9 +61,8 @@ def take_screenshot():
         screenshot = ImageGrab.grab()
         screenshot.save(f"screenshot_{timestamp}.png")
         logging.info(f"Screenshot erstellt: screenshot_{timestamp}.png")
-        time.sleep(10)  # Alle 10 Sekunden einen Screenshot erstellen
+        time.sleep(10) 
 
-# Funktion 5: Verhindern von Alt+Tab (Fensterwechsel verhindern)
 def prevent_window_switch():
     """Verhindert den Wechsel zwischen Fenstern durch Alt+Tab."""
     while True:
